@@ -16,8 +16,12 @@ function ViewSnippet() {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/snippets/${id}`);
         setSnippet(response.data);
       } catch (error) {
-        setError('Error fetching snippet. It may not exist or has been removed.');
         console.error('Error fetching snippet:', error);
+        if (error.response && error.response.status === 404) {
+          setError('Snippet not found. It may have been removed or never existed.');
+        } else {
+          setError('An error occurred while fetching the snippet. Please try again later.');
+        }
       }
     };
     fetchSnippet();
