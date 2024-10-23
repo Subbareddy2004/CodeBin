@@ -23,31 +23,18 @@ function CreateSnippet() {
     setIsLoading(true);
     setError('');
     try {
-      console.log('Sending request to:', `${import.meta.env.VITE_API_URL}/api/snippets`);
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/snippets`, 
-        { title, code, language },
-        { 
-          headers: {
-            'Content-Type': 'application/json',
-          }
-        }
-      );
-      console.log('Response:', response);
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/snippets`, {
+        title,
+        code,
+        language
+      }, {
+        withCredentials: true
+      });
       setGeneratedLink(`${window.location.origin}/snippet/${response.data.id}`);
+      setIsLoading(false);
     } catch (error) {
-      if (error.response && error.response.data && error.response.data.errors) {
-        const errorMessages = error.response.data.errors.map(err => err.msg).join(', ');
-        setError(`Validation error: ${errorMessages}`);
-      } else if (error.response) {
-        setError(`Error: ${error.response.data.error || 'Unknown error occurred'}`);
-      } else if (error.request) {
-        setError('No response received from server. Please try again.');
-      } else {
-        setError('Error creating snippet. Please try again.');
-      }
-      console.error('Full error object:', error);
-      console.error('Error creating snippet:', error);
-    } finally {
+      console.error('Error details:', error.response || error);
+      setError(error.response?.data?.error || 'An error occurred while creating the snippet.');
       setIsLoading(false);
     }
   };

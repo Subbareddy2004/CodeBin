@@ -15,7 +15,9 @@ function ViewSnippet() {
   useEffect(() => {
     const fetchSnippet = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/snippets/${id}`);
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/snippets/${id}`, {
+          withCredentials: true
+        });
         setSnippet(response.data);
       } catch (error) {
         console.error('Error fetching snippet:', error);
