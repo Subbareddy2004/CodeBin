@@ -30,6 +30,7 @@ function CreateSnippet() {
       }, {
         withCredentials: true
       });
+      // Use the full URL of your frontend application
       setGeneratedLink(`${window.location.origin}/snippet/${response.data.id}`);
       setIsLoading(false);
     } catch (error) {
