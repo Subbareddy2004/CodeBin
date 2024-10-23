@@ -27,7 +27,6 @@ function CreateSnippet() {
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/snippets`, 
         { title, code, language },
         { 
-          withCredentials: true,
           headers: {
             'Content-Type': 'application/json',
           }
