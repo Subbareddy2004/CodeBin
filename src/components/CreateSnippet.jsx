@@ -23,7 +23,9 @@ function CreateSnippet() {
     setIsLoading(true);
     setError('');
     try {
+      console.log('Sending request to:', `${import.meta.env.VITE_API_URL}/api/snippets`);
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/snippets`, { title, code, language });
+      console.log('Response:', response);
       setGeneratedLink(`${window.location.origin}/snippet/${response.data.id}`);
     } catch (error) {
       if (error.response && error.response.data && error.response.data.errors) {
@@ -36,6 +38,7 @@ function CreateSnippet() {
       } else {
         setError('Error creating snippet. Please try again.');
       }
+      console.error('Full error object:', error);
       console.error('Error creating snippet:', error);
     } finally {
       setIsLoading(false);
