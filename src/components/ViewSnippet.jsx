@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { FaCopy, FaHome } from 'react-icons/fa';
 
 function ViewSnippet() {
   const [snippet, setSnippet] = useState(null);
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
   const [copySuccess, setCopySuccess] = useState(false);
   const { id } = useParams();
 
@@ -22,6 +24,8 @@ function ViewSnippet() {
         } else {
           setError('An error occurred while fetching the snippet. Please try again later.');
         }
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchSnippet();
@@ -33,8 +37,18 @@ function ViewSnippet() {
     setTimeout(() => setCopySuccess(false), 2000);
   };
 
-  if (error) return <div className="text-center text-red-500">{error}</div>;
-  if (!snippet) return <div className="text-center">Loading...</div>;
+  if (isLoading) return <div className="text-center">Loading...</div>;
+  if (error) {
+    return (
+      <div className="text-center">
+        <p className="text-red-500 mb-4">{error}</p>
+        <Link to="/" className="text-blue-500 hover:underline flex items-center justify-center">
+          <FaHome className="mr-2" />
+          Go back to home
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -42,14 +56,31 @@ function ViewSnippet() {
       <div className="relative">
         <button
           onClick={copyToClipboard}
-          className="absolute top-2 right-2 bg-blue-600 text-white px-3 py-1 rounded-md text-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 ease-in-out"
+          className="absolute top-2 right-2 bg-blue-600 text-white px-3 py-1 rounded-md text-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 ease-in-out flex items-center"
         >
+          <FaCopy className="mr-2" />
           {copySuccess ? 'Copied!' : 'Copy Code'}
         </button>
-        <SyntaxHighlighter language={snippet.language} style={vscDarkPlus} className="rounded-md">
+        <SyntaxHighlighter 
+          language={snippet.language} 
+          style={vscDarkPlus}
+          customStyle={{
+            padding: '1.5rem',
+            fontSize: '0.9rem',
+            lineHeight: '1.5',
+            fontFamily: "'Fira Code', 'Consolas', monospace",
+            backgroundColor: '#1e1e1e',
+          }}
+          showLineNumbers={true}
+          wrapLines={true}
+        >
           {snippet.code}
         </SyntaxHighlighter>
       </div>
+      <Link to="/" className="text-blue-500 hover:underline flex items-center">
+        <FaHome className="mr-2" />
+        Back to Create Snippet
+      </Link>
     </div>
   );
 }
