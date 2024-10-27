@@ -11,7 +11,7 @@ function App() {
         <nav className="bg-gray-900 bg-opacity-50 backdrop-filter backdrop-blur-xl p-4">
           <div className="container mx-auto flex justify-between items-center">
             <Link to="/" className="text-3xl font-bold text-cyan-400">CodeBin</Link>
-            <a href="https://github.com/yourusername/codebin" target="_blank" rel="noopener noreferrer" className="text-white hover:text-cyan-400 transition-colors">
+            <a href="https://github.com/Subbareddy2004/CodeBin" target="_blank" rel="noopener noreferrer" className="text-white hover:text-cyan-400 transition-colors">
               <FaGithub size={24} />
             </a>
           </div>
