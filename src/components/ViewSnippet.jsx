@@ -39,12 +39,23 @@ function ViewSnippet() {
     setTimeout(() => setCopySuccess(false), 2000);
   };
 
-  if (isLoading) return <div className="text-center">Loading...</div>;
+  // Loading State: Displays a centered CSS spinner.
+  // - `flex justify-center items-center py-10`: Centers the spinner and provides vertical padding.
+  // - The spinner itself is a div with Tailwind classes for animation, shape, and border color.
+  if (isLoading) return (
+    <div className="flex justify-center items-center py-10">
+      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-cyan-500"></div>
+    </div>
+  );
+
+  // Error State: Displays a centered error message and a link to home.
+  // - `py-10`: Provides vertical padding.
+  // - `text-lg`: Increases font size for better readability of the error and link.
   if (error) {
     return (
-      <div className="text-center">
-        <p className="text-red-500 mb-4">{error}</p>
-        <Link to="/" className="text-blue-500 hover:underline flex items-center justify-center">
+      <div className="text-center py-10">
+        <p className="text-red-500 mb-4 text-lg">{error}</p>
+        <Link to="/" className="text-blue-500 hover:underline flex items-center justify-center focus:outline-none focus:ring-1 focus:ring-cyan-400 rounded-sm transition duration-300 text-lg">
           <FaHome className="mr-2" />
           Go back to home
         </Link>
@@ -52,10 +63,16 @@ function ViewSnippet() {
     );
   }
 
+  // Main content display for a fetched snippet.
+  // Uses space-y-8 for consistent vertical spacing between title, code block, and back link.
   return (
-    <div className="space-y-6">
-      <h2 className="text-3xl font-bold mb-4">{snippet.title}</h2>
+    <div className="space-y-8">
+      {/* Snippet Title: Increased bottom margin (mb-6) for better separation. */}
+      <h2 className="text-3xl font-bold mb-6">{snippet.title}</h2>
+      
+      {/* Code Display Area: Relative positioning for the absolute positioned copy button. */}
       <div className="relative">
+        {/* Copy Code Button: Positioned at the top-right of the code block. */}
         <button
           onClick={copyToClipboard}
           className="absolute top-2 right-2 bg-blue-600 text-white px-3 py-1 rounded-md text-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 ease-in-out flex items-center"
@@ -63,6 +80,11 @@ function ViewSnippet() {
           <FaCopy className="mr-2" />
           {copySuccess ? 'Copied!' : 'Copy Code'}
         </button>
+        
+        {/* SyntaxHighlighter for displaying code with appropriate styling.
+            - `vscDarkPlus` provides the color theme.
+            - `customStyle` ensures consistent padding, font size, line height, and background
+              with the CreateSnippet preview. */}
         <SyntaxHighlighter 
           language={snippet.language} 
           style={vscDarkPlus}
@@ -79,7 +101,9 @@ function ViewSnippet() {
           {snippet.code}
         </SyntaxHighlighter>
       </div>
-      <Link to="/" className="text-blue-500 hover:underline flex items-center">
+      
+      {/* Link to navigate back to the snippet creation page. */}
+      <Link to="/" className="text-blue-500 hover:underline flex items-center focus:outline-none focus:ring-1 focus:ring-cyan-400 rounded-sm transition duration-300">
         <FaHome className="mr-2" />
         Back to Create Snippet
       </Link>
