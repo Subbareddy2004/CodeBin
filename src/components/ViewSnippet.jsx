@@ -2,9 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+// Import the light theme for syntax highlighting
+import { prism } from 'react-syntax-highlighter/dist/esm/styles/prism'; // Light theme for code blocks
 import { FaCopy, FaHome } from 'react-icons/fa';
 
+// This component displays a single code snippet and has been updated for the light theme.
+// Key changes include:
+// - Text colors updated for readability on light backgrounds (e.g., text-slate-700 for titles, text-blue-600 for links).
+// - Loading spinner and error message colors adjusted to fit the light theme.
+// - Syntax Highlighting: Switched from 'vscDarkPlus' to 'prism' theme.
 function ViewSnippet() {
   const [snippet, setSnippet] = useState(null);
   const [error, setError] = useState('');
@@ -40,22 +46,21 @@ function ViewSnippet() {
   };
 
   // Loading State: Displays a centered CSS spinner.
-  // - `flex justify-center items-center py-10`: Centers the spinner and provides vertical padding.
-  // - The spinner itself is a div with Tailwind classes for animation, shape, and border color.
+  // - Spinner border color changed from 'border-cyan-500' to 'border-blue-500' for light theme.
   if (isLoading) return (
     <div className="flex justify-center items-center py-10">
-      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-cyan-500"></div>
+      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
     </div>
   );
 
   // Error State: Displays a centered error message and a link to home.
-  // - `py-10`: Provides vertical padding.
-  // - `text-lg`: Increases font size for better readability of the error and link.
+  // - Text color for error message changed from 'text-red-500' to 'text-red-700'.
+  // - Link color changed from 'text-blue-500' to 'text-blue-600' (primary accent).
   if (error) {
     return (
       <div className="text-center py-10">
-        <p className="text-red-500 mb-4 text-lg">{error}</p>
-        <Link to="/" className="text-blue-500 hover:underline flex items-center justify-center focus:outline-none focus:ring-1 focus:ring-cyan-400 rounded-sm transition duration-300 text-lg">
+        <p className="text-red-700 mb-4 text-lg">{error}</p>
+        <Link to="/" className="text-blue-600 hover:text-blue-700 hover:underline flex items-center justify-center focus:outline-none focus:ring-1 focus:ring-blue-500 rounded-sm transition duration-300 text-lg">
           <FaHome className="mr-2" />
           Go back to home
         </Link>
@@ -63,16 +68,15 @@ function ViewSnippet() {
     );
   }
 
-  // Main content display for a fetched snippet.
-  // Uses space-y-8 for consistent vertical spacing between title, code block, and back link.
   return (
     <div className="space-y-8">
-      {/* Snippet Title: Increased bottom margin (mb-6) for better separation. */}
-      <h2 className="text-3xl font-bold mb-6">{snippet.title}</h2>
+      {/* Snippet Title: Text color 'text-slate-700' for readability on light background. */}
+      <h2 className="text-3xl font-semibold text-slate-700 mb-6">{snippet.title}</h2>
       
-      {/* Code Display Area: Relative positioning for the absolute positioned copy button. */}
-      <div className="relative">
-        {/* Copy Code Button: Positioned at the top-right of the code block. */}
+      {/* Code Display Area:
+          - Container div now has 'border-slate-300' for definition on light background.
+          - Copy Code button styled as a primary action button ('bg-blue-600'). */}
+      <div className="relative rounded-lg overflow-hidden shadow-md border border-slate-300">
         <button
           onClick={copyToClipboard}
           className="absolute top-2 right-2 bg-blue-600 text-white px-3 py-1 rounded-md text-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 ease-in-out flex items-center"
@@ -81,19 +85,18 @@ function ViewSnippet() {
           {copySuccess ? 'Copied!' : 'Copy Code'}
         </button>
         
-        {/* SyntaxHighlighter for displaying code with appropriate styling.
-            - `vscDarkPlus` provides the color theme.
-            - `customStyle` ensures consistent padding, font size, line height, and background
-              with the CreateSnippet preview. */}
+        {/* SyntaxHighlighter theme switched to 'prism' (light theme).
+            - Background color explicitly set to '#f8f9fa' to complement the 'prism' style
+              and ensure consistency. This replaces the dark background (e.g., '#1e1e1e') used previously. */}
         <SyntaxHighlighter 
           language={snippet.language} 
-          style={vscDarkPlus}
+          style={prism} // Changed from vscDarkPlus (dark theme)
           customStyle={{
             padding: '1.5rem',
             fontSize: '0.9rem',
             lineHeight: '1.5',
             fontFamily: "'Fira Code', 'Consolas', monospace",
-            backgroundColor: '#1e1e1e',
+            backgroundColor: '#f8f9fa', // Light background for code block
           }}
           showLineNumbers={true}
           wrapLines={true}
@@ -102,8 +105,8 @@ function ViewSnippet() {
         </SyntaxHighlighter>
       </div>
       
-      {/* Link to navigate back to the snippet creation page. */}
-      <Link to="/" className="text-blue-500 hover:underline flex items-center focus:outline-none focus:ring-1 focus:ring-cyan-400 rounded-sm transition duration-300">
+      {/* "Back to Create Snippet" link styled with primary accent color 'text-blue-600'. */}
+      <Link to="/" className="text-blue-600 hover:text-blue-700 hover:underline flex items-center focus:outline-none focus:ring-1 focus:ring-blue-500 rounded-sm transition duration-300">
         <FaHome className="mr-2" />
         Back to Create Snippet
       </Link>

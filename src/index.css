@@ -4,6 +4,17 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+  Base theme for the application.
+  - Sets a light gray background (bg-slate-50) for the entire page.
+  - Sets the default text color to a dark slate (text-slate-800) for high readability.
+  - Includes font smoothing for better text rendering.
+*/
+body {
+  @apply bg-slate-50 text-slate-800;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
 @keyframes fade-in-down {
   0% {
